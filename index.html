@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J Crews| Landscaping and Gardening Specialists</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              950: '#0d1a10', 900: '#1c3021', 800: '#24402c',
+              700: '#2d5a3d', 600: '#3a7050', 500: '#4a8060',
+              400: '#6a9c78', 300: '#90b89a', 200: '#b8d4be', 100: '#dceede',
+            },
+            cream: { 50: '#fefcf7', 100: '#f9f5eb', 200: '#f3edd9', 300: '#e8e0c8' },
+            gold: { 300: '#e0c070', 400: '#d4a845', 500: '#c49530', 600: '#a87c20' },
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: { tightest: '-0.04em', tighter: '-0.03em' },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f9f5eb; color: #1c3021; overflow-x: hidden; }
+
+    /* ── Grain texture ── */
+    body::before {
+      content: '';
+      position: fixed; inset: -50%;
+      width: 200%; height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 9999;
+      animation: grain 6s steps(8) infinite;
+    }
+    @keyframes grain {
+      0%,100% { transform: translate(0,0); }
+      10% { transform: translate(-2%,-3%); }
+      20% { transform: translate(3%,1%); }
+      30% { transform: translate(-1%,4%); }
+      40% { transform: translate(2%,-2%); }
+      50% { transform: translate(-3%,3%); }
+      60% { transform: translate(1%,-4%); }
+      70% { transform: translate(-4%,1%); }
+      80% { transform: translate(3%,3%); }
+      90% { transform: translate(-2%,2%); }
+    }
+
+    /* ── Nav ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.5rem 0;
+      transition: background 0.4s cubic-bezier(.4,0,.2,1), padding 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s;
+    }
+    #navbar.scrolled {
+      background: rgba(28,48,33,0.97);
+      backdrop-filter: blur(16px);
+      padding: 1rem 0;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.25);
+    }
+    .nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0; height: 1px;
+      background: #d4a845;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(74,128,96,0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 80% at 10% 80%, rgba(28,48,33,0.6) 0%, transparent 70%),
+        linear-gradient(160deg, #0d1a10 0%, #1c3021 40%, #243a2c 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .hero-image-grid {
+      position: absolute; right: 0; top: 0; bottom: 0;
+      width: 48%; overflow: hidden;
+    }
+    .hero-img-cell {
+      position: absolute; overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .hero-img-cell img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.75) saturate(1.1);
+    }
+    .hero-vignette {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #1c3021 0%, transparent 35%);
+      z-index: 1;
+    }
+    .hero-vignette-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to top, rgba(13,26,16,0.7) 0%, transparent 100%);
+      z-index: 1;
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.9s cubic-bezier(.4,0,.2,1), transform 0.9s cubic-bezier(.4,0,.2,1); }
+    .reveal-left.visible { opacity: 1; transform: none; }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.9s cubic-bezier(.4,0,.2,1), transform 0.9s cubic-bezier(.4,0,.2,1); }
+    .reveal-right.visible { opacity: 1; transform: none; }
+
+    /* ── Hero text ── */
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #d4a845;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.8s cubic-bezier(.4,0,.2,1) 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      color: #fff;
+      opacity: 0; transform: translateY(30px);
+      animation: fadeUp 0.9s cubic-bezier(.4,0,.2,1) 0.5s forwards;
+    }
+    .hero-title em { font-style: italic; color: #90b89a; }
+    .hero-subtitle {
+      font-size: 1.0625rem; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.7); max-width: 38rem;
+      opacity: 0; transform: translateY(25px);
+      animation: fadeUp 0.9s cubic-bezier(.4,0,.2,1) 0.7s forwards;
+    }
+    .hero-ctas {
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.9s cubic-bezier(.4,0,.2,1) 0.9s forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #d4a845; color: #1c3021;
+      padding: 0.875rem 2rem; border-radius: 3px;
+      font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(212,168,69,0.35);
+    }
+    .btn-primary:hover {
+      background: #e0c070; transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212,168,69,0.45);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: #fff;
+      padding: 0.875rem 2rem; border-radius: 3px;
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.35); cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7);
+      transform: translateY(-2px);
+    }
+    .btn-dark {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #1c3021; color: #fff;
+      padding: 0.875rem 2rem; border-radius: 3px;
+      font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(28,48,33,0.3);
+    }
+    .btn-dark:hover { background: #243a2c; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(28,48,33,0.4); }
+
+    /* ── Scroll indicator ── */
+    .scroll-indicator {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0; animation: fadeUp 1s 1.5s forwards;
+      color: rgba(255,255,255,0.5); font-size: 0.6875rem; letter-spacing: 0.15em;
+      text-transform: uppercase; z-index: 2;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%,100% { transform: scaleY(1) translateY(0); opacity: 0.5; }
+      50% { transform: scaleY(0.5) translateY(10px); opacity: 1; }
+    }
+
+    /* ── Stat badge ── */
+    .stat-badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      min-width: 150px;
+    }
+
+    /* ── Section headings ── */
+    .section-eyebrow {
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #4a8060;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .section-eyebrow::before {
+      content: ''; display: block; width: 2rem; height: 1px; background: #4a8060;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.25rem, 4vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: #1c3021;
+    }
+    .section-title-light { color: #fff; }
+    .section-eyebrow-light { color: #90b89a; }
+    .section-eyebrow-light::before { background: #90b89a; }
+
+    /* ── Services ── */
+    .service-card {
+      background: #fff;
+      border: 1px solid rgba(28,48,33,0.08);
+      border-radius: 4px;
+      padding: 2.25rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1), border-color 0.35s;
+      cursor: pointer;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1c3021 0%, #2d5a3d 100%);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(28,48,33,0.2), 0 4px 16px rgba(28,48,33,0.1);
+      border-color: transparent;
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover .service-icon-wrap { background: rgba(255,255,255,0.12); }
+    .service-card:hover .service-title,
+    .service-card:hover .service-desc,
+    .service-card:hover .service-link { color: #fff; }
+    .service-card:hover .service-icon { filter: brightness(0) invert(1); }
+    .service-card > * { position: relative; z-index: 1; }
+    .service-icon-wrap {
+      width: 3rem; height: 3rem; border-radius: 50%;
+      background: rgba(28,48,33,0.06);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: background 0.35s;
+    }
+    .service-icon { width: 1.375rem; height: 1.375rem; }
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: #1c3021; margin-bottom: 0.625rem;
+      transition: color 0.35s;
+    }
+    .service-desc {
+      font-size: 0.875rem; line-height: 1.7;
+      color: #5a6e5c; transition: color 0.35s;
+    }
+    .service-link {
+      display: inline-flex; align-items: center; gap: 0.375rem;
+      margin-top: 1.25rem;
+      font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.05em;
+      color: #4a8060; text-decoration: none;
+      transition: color 0.35s, gap 0.2s;
+    }
+    .service-card:hover .service-link { gap: 0.625rem; }
+
+    /* ── Stats ── */
+    .stat-item { text-align: center; padding: 2rem 1rem; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900; color: #fff; line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .stat-suffix { color: #d4a845; }
+    .stat-label {
+      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.55);
+      margin-top: 0.5rem;
+    }
+
+    /* ── Portfolio ── */
+    .filter-btn {
+      padding: 0.5rem 1.25rem; border-radius: 2px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border: 1px solid rgba(28,48,33,0.2);
+      background: transparent; color: #4a6050; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: #1c3021; color: #fff; border-color: #1c3021;
+    }
+    .portfolio-item {
+      position: relative; overflow: hidden; border-radius: 3px;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+    }
+    .portfolio-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .portfolio-item:hover img { transform: scale(1.06); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,26,16,0.92) 0%, rgba(13,26,16,0.1) 60%, transparent 100%);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.5rem;
+    }
+    .portfolio-item:hover .portfolio-overlay { transform: none; }
+    .portfolio-always {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(13,26,16,0.8) 0%, transparent 100%);
+      padding: 1.5rem 1.5rem 1rem;
+      transition: opacity 0.3s;
+    }
+    .portfolio-item:hover .portfolio-always { opacity: 0; }
+    .portfolio-tag {
+      display: inline-block;
+      font-size: 0.625rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #d4a845;
+      margin-bottom: 0.375rem;
+    }
+    .portfolio-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.125rem; font-weight: 700; color: #fff;
+    }
+    .portfolio-meta {
+      font-size: 0.75rem; color: rgba(255,255,255,0.6);
+      margin-top: 0.5rem;
+    }
+    .portfolio-item.hidden { display: none; }
+
+    /* ── Testimonials ── */
+    .testimonial-track {
+      display: flex; gap: 1.5rem;
+      transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+    }
+    .testimonial-card {
+      flex-shrink: 0;
+      background: #fff;
+      border: 1px solid rgba(28,48,33,0.08);
+      border-radius: 4px;
+      padding: 2rem;
+      width: 380px;
+      box-shadow: 0 4px 24px rgba(28,48,33,0.06), 0 1px 4px rgba(28,48,33,0.04);
+    }
+    .stars { color: #d4a845; font-size: 0.9rem; letter-spacing: 0.1em; }
+    .review-text {
+      font-size: 0.9375rem; line-height: 1.75;
+      color: #3a4f3c; margin: 1rem 0 1.5rem;
+      font-style: italic;
+    }
+    .reviewer-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; color: #1c3021; font-size: 0.9375rem;
+    }
+    .reviewer-loc { font-size: 0.75rem; color: #7a9480; margin-top: 0.125rem; }
+    .reviewer-avatar {
+      width: 2.75rem; height: 2.75rem; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(28,48,33,0.1);
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(28,48,33,0.2); cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active { width: 20px; border-radius: 3px; background: #1c3021; }
+
+    /* ── Why choose us ── */
+    .why-card {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1.5rem; border-radius: 4px;
+      transition: background 0.3s, transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .why-card:hover { background: rgba(28,48,33,0.04); transform: translateX(4px); }
+    .why-icon {
+      width: 2.75rem; height: 2.75rem; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #1c3021, #2d5a3d);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(28,48,33,0.25);
+    }
+
+    /* ── Contact ── */
+    .contact-input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 3px;
+      padding: 0.875rem 1.125rem;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-input::placeholder { color: rgba(255,255,255,0.35); }
+    .contact-input:focus { border-color: rgba(212,168,69,0.6); background: rgba(255,255,255,0.09); }
+    .contact-label {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-bottom: 0.5rem;
+    }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .contact-detail:last-child { border-bottom: none; }
+    .contact-icon {
+      width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      background: rgba(212,168,69,0.15);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* ── Mobile nav ── */
+    #mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 998;
+      background: rgba(13,26,16,0.98);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu .nav-link {
+      font-size: 1.75rem; letter-spacing: 0.05em;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── Footer ── */
+    .footer-link {
+      color: rgba(255,255,255,0.5); font-size: 0.875rem;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-link:hover { color: rgba(255,255,255,0.9); }
+
+    /* ── Divider ── */
+    .ornament {
+      display: flex; align-items: center; gap: 1rem;
+      color: rgba(28,48,33,0.3);
+    }
+    .ornament::before, .ornament::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(28,48,33,0.2), transparent);
+    }
+
+    /* ── Scroll-triggered number counter ── */
+    .count-target { display: inline; }
+
+    /* ── Floating CTA ── */
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-card { animation: float 4s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav id="navbar">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3 text-white no-underline">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#2d5a3d,#4a8060);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;letter-spacing:0.04em;line-height:1;">J Crews</div>
+        <div style="font-size:0.55rem;font-weight:600;letter-spacing:0.22em;color:rgba(255,255,255,0.5);line-height:1;margin-top:2px;">Landscaping</div>
+      </div>
+    </a>
+    <div class="hidden lg:flex items-center gap-8">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#work" class="nav-link">Our Work</a>
+      <a href="#reviews" class="nav-link">Reviews</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <a href="#contact" class="hidden lg:inline-flex btn-primary" style="padding:0.625rem 1.5rem;font-size:0.8125rem;">
+      Free Quote
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+    <button id="menu-btn" class="lg:hidden text-white" style="background:none;border:none;cursor:pointer;" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobile-menu">
+  <button id="close-menu" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:white;cursor:pointer;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="#about" class="nav-link">About</a>
+  <a href="#services" class="nav-link">Services</a>
+  <a href="#work" class="nav-link">Our Work</a>
+  <a href="#reviews" class="nav-link">Reviews</a>
+  <a href="#contact" class="nav-link">Contact</a>
+  <a href="#contact" class="btn-primary">Get Free Quote</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <!-- Right image mosaic -->
+  <div class="hero-image-grid">
+    <div class="hero-vignette"></div>
+    <div class="hero-vignette-bottom"></div>
+    <!-- Top half -->
+    <img src="images/photo-hero-main.jpg" alt="Porcelain patio with circular lawn feature" style="width:100%;height:55%;object-fit:cover;filter:brightness(0.65) saturate(1.15);">
+    <!-- Bottom half grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;height:45%;">
+      <img src="images/photo-lawn.webp" alt="Premium artificial lawn" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6) saturate(1.1);">
+      <img src="images/photo-decking.webp" alt="Composite decking installation" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6) saturate(1.1);">
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 py-32 relative z-10 w-full">
+    <div style="max-width:52rem;">
+      <div class="hero-eyebrow">
+        <span style="width:2rem;height:1px;background:#d4a845;display:inline-block;"></span>
+        Award-Winning Landscape Specialists
+      </div>
+      <h1 class="hero-title" style="margin-top:1.5rem;margin-bottom:1.5rem;">
+        Transform Your<br><em>Outdoor Space</em><br>Into Paradise
+      </h1>
+      <p class="hero-subtitle">
+        Bespoke garden design and premium driveway renovation across the UK.
+        From concept to completion — we bring your vision to life.
+      </p>
+      <div class="hero-ctas" style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+        <a href="#work" class="btn-primary">
+          View Our Work
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#contact" class="btn-outline">Get Free Quote</a>
+      </div>
+
+      <!-- Floating stat badges -->
+      <div style="margin-top:3.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <div class="stat-badge float-card" style="animation-delay:0s;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#fff;line-height:1;">500<span style="color:#d4a845;">+</span></div>
+          <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:0.25rem;">Projects Done</div>
+        </div>
+        <div class="stat-badge float-card" style="animation-delay:1.3s;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#fff;line-height:1;">15<span style="color:#d4a845;">+</span></div>
+          <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:0.25rem;">Years Experience</div>
+        </div>
+        <div class="stat-badge float-card" style="animation-delay:2.6s;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#fff;line-height:1;">98<span style="color:#d4a845;">%</span></div>
+          <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:0.25rem;">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE STRIP ═══ -->
+<style>@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style>
+<div style="background:#1c3021;overflow:hidden;padding:1rem 0;border-top:1px solid rgba(255,255,255,0.05);">
+  <div style="display:flex;gap:0;animation:marquee 28s linear infinite;white-space:nowrap;will-change:transform;">
+    <span style="font-size:0.7rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.42);display:inline-flex;align-items:center;gap:1.5rem;padding-right:1.5rem;">
+      Garden Design <span style="color:#d4a845;">✦</span> Driveway Renovation <span style="color:#d4a845;">✦</span> Patio &amp; Decking <span style="color:#d4a845;">✦</span> Lawn Care <span style="color:#d4a845;">✦</span> Water Features <span style="color:#d4a845;">✦</span> Landscape Lighting <span style="color:#d4a845;">✦</span> Garden Design <span style="color:#d4a845;">✦</span> Driveway Renovation <span style="color:#d4a845;">✦</span> Patio &amp; Decking <span style="color:#d4a845;">✦</span> Lawn Care <span style="color:#d4a845;">✦</span> Water Features <span style="color:#d4a845;">✦</span> Landscape Lighting <span style="color:#d4a845;">✦</span>
+    </span>
+    <span style="font-size:0.7rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.42);display:inline-flex;align-items:center;gap:1.5rem;padding-right:1.5rem;" aria-hidden="true">
+      Garden Design <span style="color:#d4a845;">✦</span> Driveway Renovation <span style="color:#d4a845;">✦</span> Patio &amp; Decking <span style="color:#d4a845;">✦</span> Lawn Care <span style="color:#d4a845;">✦</span> Water Features <span style="color:#d4a845;">✦</span> Landscape Lighting <span style="color:#d4a845;">✦</span> Garden Design <span style="color:#d4a845;">✦</span> Driveway Renovation <span style="color:#d4a845;">✦</span> Patio &amp; Decking <span style="color:#d4a845;">✦</span> Lawn Care <span style="color:#d4a845;">✦</span> Water Features <span style="color:#d4a845;">✦</span> Landscape Lighting <span style="color:#d4a845;">✦</span>
+    </span>
+  </div>
+</div>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" style="padding:7rem 0;background:#f9f5eb;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+      <div class="section-eyebrow" style="justify-content:center;">What We Do</div>
+      <h2 class="section-title" style="margin-top:1rem;">Our <em style="font-style:italic;color:#4a8060;">Services</em></h2>
+      <p style="margin-top:1rem;font-size:1rem;line-height:1.7;color:#5a6e5c;max-width:38rem;margin-left:auto;margin-right:auto;">
+        From complete garden transformations to stunning driveway renovations —
+        crafted with expertise and built to last.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;">
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        </div>
+        <div class="service-title">Garden Design</div>
+        <div class="service-desc">Bespoke garden layouts tailored to your lifestyle, space, and vision. From concept drawings to full installation.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><rect x="2" y="13" width="20" height="7" rx="1"/><path d="M4 13V9a2 2 0 012-2h12a2 2 0 012 2v4"/><line x1="12" y1="13" x2="12" y2="20"/></svg>
+        </div>
+        <div class="service-title">Driveway Renovation</div>
+        <div class="service-desc">Block paving, resin-bound, tarmac, and pattern imprinted concrete. Durable, beautiful, and fully guaranteed.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><polygon points="3 9 12 2 21 9 21 20 3 20"/><rect x="9" y="14" width="6" height="6"/></svg>
+        </div>
+        <div class="service-title">Patio & Decking</div>
+        <div class="service-desc">Natural stone, porcelain, and composite decking installations that create seamless indoor-outdoor living.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><path d="M12 22V12"/><path d="M12 12C12 6 6 4 3 7"/><path d="M12 12C12 6 18 4 21 7"/><path d="M3 17c3-3 9-3 9 0s6 3 9 0"/></svg>
+        </div>
+        <div class="service-title">Lawn & Turf</div>
+        <div class="service-desc">Fresh turf laying, lawn levelling, and full lawn restoration to bring your garden back to life year-round.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <div class="service-title">Water Features</div>
+        <div class="service-desc">Bespoke ponds, cascading water walls, and garden fountains that add tranquility and wow factor.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon-wrap">
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="#2d5a3d" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        </div>
+        <div class="service-title">Landscape Lighting</div>
+        <div class="service-desc">LED pathway lights, uplighting, and smart garden lighting systems that transform your space after dark.</div>
+        <a href="#contact" class="service-link">
+          Enquire Now
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<section style="background:linear-gradient(135deg,#1c3021 0%,#2d5a3d 100%);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-40%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(74,128,96,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-30%;left:-5%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,69,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div id="stats-grid" style="display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid rgba(255,255,255,0.08);">
+      <div class="stat-item reveal" style="border-right:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div class="stat-number"><span class="count-target" data-target="500">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1" style="border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div class="stat-number"><span class="count-target" data-target="15">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2" style="border-right:1px solid rgba(255,255,255,0.08);">
+        <div class="stat-number"><span class="count-target" data-target="200">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number"><span class="count-target" data-target="98">0</span><span class="stat-suffix">%</span></div>
+        <div class="stat-label">Satisfaction Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PORTFOLIO ═══ -->
+<section id="work" style="padding:7rem 0;background:#fff;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:3rem;">
+      <div class="reveal">
+        <div class="section-eyebrow">Our Work</div>
+        <h2 class="section-title" style="margin-top:0.75rem;">Previous <em style="font-style:italic;color:#4a8060;">Projects</em></h2>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="garden">Gardens</button>
+        <button class="filter-btn" data-filter="driveway">Driveways</button>
+        <button class="filter-btn" data-filter="patio">Patios</button>
+        <button class="filter-btn" data-filter="lawn">Lawns</button>
+      </div>
+    </div>
+
+    <div id="portfolio-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;">
+
+      <div class="portfolio-item reveal" data-cat="garden">
+        <img src="images/photo-garden.webp" alt="Woodland Garden">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Garden</div>
+          <div class="portfolio-name">Woodland Garden</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Garden Design</div>
+          <div class="portfolio-name">Woodland Garden, Surrey</div>
+          <div class="portfolio-meta">2024 · Full Design & Installation</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-1" data-cat="garden">
+        <img src="images/photo-hero-2.jpeg" alt="Evening garden with landscape lighting">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Garden</div>
+          <div class="portfolio-name">Evening Garden Transformation</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Garden Design</div>
+          <div class="portfolio-name">Evening Garden Transformation, Surrey</div>
+          <div class="portfolio-meta">2024 · Porcelain Paving & Landscape Lighting</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-2" data-cat="patio">
+        <img src="images/photo-decking.webp" alt="Natural Stone Patio">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Patio</div>
+          <div class="portfolio-name">Indian Sandstone Terrace</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Patio & Decking</div>
+          <div class="portfolio-name">Indian Sandstone Terrace, Essex</div>
+          <div class="portfolio-meta">2023 · 85m² Patio + Raised Beds</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-1" data-cat="garden">
+        <img src="images/photo-extra-3.webp" alt="Garden patio with turf and stepping stones">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Garden</div>
+          <div class="portfolio-name">Garden Patio Retreat</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Garden Design</div>
+          <div class="portfolio-name">Garden Patio Retreat, Hampshire</div>
+          <div class="portfolio-meta">2023 · Award-Winning Design</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-2" data-cat="lawn">
+        <img src="images/photo-lawn.webp" alt="Luxury Lawn">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Lawn</div>
+          <div class="portfolio-name">Luxury Turf Laying</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Lawn & Turf</div>
+          <div class="portfolio-name">Luxury Turf Laying, Berkshire</div>
+          <div class="portfolio-meta">2023 · 300m² Premium Turf</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-3" data-cat="patio">
+        <img src="images/photo-extra-2.webp" alt="Modern composite decking installation">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Patio</div>
+          <div class="portfolio-name">Modern Composite Decking</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Patio & Decking</div>
+          <div class="portfolio-name">Modern Composite Decking, Sussex</div>
+          <div class="portfolio-meta">2024 · Full Decking Installation</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-1" data-cat="patio">
+        <img src="images/photo-hero-main.jpg" alt="Porcelain patio with circular lawn feature">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Patio</div>
+          <div class="portfolio-name">Porcelain Patio Design</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Patio & Decking</div>
+          <div class="portfolio-name">Porcelain Patio Design, Essex</div>
+          <div class="portfolio-meta">2024 · 120m² Porcelain Paving</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-2" data-cat="garden">
+        <img src="images/photo-hero-3.jpeg" alt="Night garden with turf and porcelain paving">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Garden</div>
+          <div class="portfolio-name">Night Garden Design</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Garden Design</div>
+          <div class="portfolio-name">Night Garden Design, Berkshire</div>
+          <div class="portfolio-meta">2023 · Lighting & Landscaping</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item reveal reveal-delay-3" data-cat="lawn">
+        <img src="images/photo-extra-1.webp" alt="Artificial lawn with stepping stones">
+        <div class="portfolio-always">
+          <div class="portfolio-tag">Lawn</div>
+          <div class="portfolio-name">Artificial Lawn Installation</div>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-tag">Lawn & Turf</div>
+          <div class="portfolio-name">Artificial Lawn Installation, Kent</div>
+          <div class="portfolio-meta">2024 · Premium Artificial Turf</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reveal" style="text-align:center;margin-top:3rem;">
+      <a href="#contact" class="btn-dark">
+        Start Your Project
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section id="reviews" style="padding:7rem 0;background:#f3edd9;overflow:hidden;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:3.5rem;">
+      <div class="reveal">
+        <div class="section-eyebrow">Testimonials</div>
+        <h2 class="section-title" style="margin-top:0.75rem;">What Our <em style="font-style:italic;color:#4a8060;">Clients</em> Say</h2>
+      </div>
+      <div class="reveal reveal-delay-2" style="display:flex;gap:0.75rem;align-items:center;">
+        <button id="prev-btn" aria-label="Previous" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(28,48,33,0.2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1c3021" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button id="next-btn" aria-label="Next" style="width:44px;height:44px;border-radius:50%;border:none;background:#1c3021;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="overflow:hidden;">
+      <div class="testimonial-track" id="testimonial-track">
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Landscape LTD completely transformed our overgrown back garden into an absolute showstopper. Every detail was perfect — from the planting plan to the lighting. We cannot recommend them highly enough."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/2d5a3d/90b89a?text=SJ" alt="Sarah J">
+            <div>
+              <div class="reviewer-name">Sarah Johnson</div>
+              <div class="reviewer-loc">Surrey, UK · Garden Design</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Our new block paving driveway is stunning. The team arrived on time, worked cleanly, and finished ahead of schedule. The quality is exceptional and we've had so many compliments from neighbours."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/3d3020/907850?text=MT" alt="Mark T">
+            <div>
+              <div class="reviewer-name">Mark Thompson</div>
+              <div class="reviewer-loc">Kent, UK · Driveway Renovation</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Absolutely brilliant from start to finish. The design consultation was professional and creative, and the finished patio exceeded all our expectations. It's like having a luxury outdoor room."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/1a3d28/509060?text=EW" alt="Emma W">
+            <div>
+              <div class="reviewer-name">Emma Williams</div>
+              <div class="reviewer-loc">Hampshire, UK · Patio & Decking</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"The team laid our lawn beautifully — perfectly level, lush green turf, and they even sorted out the drainage issue we'd had for years. Six months on and it still looks immaculate."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/2a4a1e/70a050?text=DC" alt="David C">
+            <div>
+              <div class="reviewer-name">David Clarke</div>
+              <div class="reviewer-loc">Berkshire, UK · Lawn & Turf</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"The garden lighting they installed is absolutely magical. We now spend evenings outside all year round. The team were incredibly knowledgeable and the installation was flawless."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/1e3820/4a8060?text=LP" alt="Lisa P">
+            <div>
+              <div class="reviewer-name">Lisa Patel</div>
+              <div class="reviewer-loc">Essex, UK · Landscape Lighting</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"We had a complete garden redesign and the results are breathtaking. The water feature is our favourite — it's so peaceful. Landscape LTD have become our go-to for all things outdoor."</p>
+          <div style="display:flex;align-items:center;gap:0.875rem;">
+            <img class="reviewer-avatar" src="https://placehold.co/56x56/303035/909098?text=RB" alt="Robert B">
+            <div>
+              <div class="reviewer-name">Robert Brown</div>
+              <div class="reviewer-loc">Sussex, UK · Full Garden Redesign</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:0.5rem;margin-top:2.5rem;" id="dots-container">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY CHOOSE US / ABOUT ═══ -->
+<section id="about" style="padding:7rem 0;background:#fff;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;" class="md-grid">
+
+      <div class="reveal-left">
+        <div style="position:relative;border-radius:4px;overflow:hidden;">
+          <img src="images/photo-lawn.webp" alt="Our team at work" style="width:100%;aspect-ratio:5/6;object-fit:cover;object-position:center top;display:block;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(13,26,16,0.7) 0%,transparent 60%);"></div>
+          <div style="position:absolute;bottom:2rem;left:2rem;right:2rem;">
+            <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;">
+              <div style="width:48px;height:48px;border-radius:50%;background:#d4a845;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1c3021" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Playfair Display',serif;font-weight:700;color:#fff;font-size:1.0625rem;">Fully Guaranteed Work</div>
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-top:0.125rem;">5-year workmanship guarantee on all projects</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <div class="section-eyebrow">Why Choose Us</div>
+        <h2 class="section-title" style="margin-top:1rem;margin-bottom:1.5rem;">Crafting <em style="font-style:italic;color:#4a8060;">Exceptional</em> Outdoor Spaces</h2>
+        <p style="font-size:1rem;line-height:1.8;color:#5a6e5c;margin-bottom:2.5rem;">
+          With over 15 years of experience across the South of England, Landscape LTD has built
+          a reputation for delivering transformative outdoor spaces that combine beauty with
+          durability. Every project is unique — and we treat it that way.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div class="why-card">
+            <div class="why-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#90b89a" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:700;color:#1c3021;font-size:1rem;margin-bottom:0.25rem;">Expert Design Team</div>
+              <div style="font-size:0.875rem;line-height:1.65;color:#5a6e5c;">Qualified landscape architects and garden designers with award-winning portfolios.</div>
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#90b89a" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:700;color:#1c3021;font-size:1rem;margin-bottom:0.25rem;">Premium Materials Only</div>
+              <div style="font-size:0.875rem;line-height:1.65;color:#5a6e5c;">We source only the finest materials — natural stone, premium turf, and quality paving.</div>
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#90b89a" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:700;color:#1c3021;font-size:1rem;margin-bottom:0.25rem;">5-Year Workmanship Guarantee</div>
+              <div style="font-size:0.875rem;line-height:1.65;color:#5a6e5c;">Total confidence in our work — backed by our comprehensive guarantee and aftercare service.</div>
+            </div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#90b89a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:700;color:#1c3021;font-size:1rem;margin-bottom:0.25rem;">Local, Family Business</div>
+              <div style="font-size:0.875rem;line-height:1.65;color:#5a6e5c;">Proudly local — we invest in our community and our clients become lifelong friends.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2.5rem;">
+          <a href="#contact" class="btn-dark">Book a Consultation</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROCESS ═══ -->
+<section style="padding:7rem 0;background:#f9f5eb;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+      <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+      <h2 class="section-title" style="margin-top:0.75rem;">Our Simple <em style="font-style:italic;color:#4a8060;">Process</em></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;position:relative;">
+      <!-- Connecting line -->
+      <div style="position:absolute;top:3rem;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(28,48,33,0.15),rgba(28,48,33,0.15),transparent);display:none;" class="lg-connector"></div>
+
+      <div class="reveal" style="text-align:center;padding:2rem 1.5rem;">
+        <div style="width:64px;height:64px;border-radius:50%;background:#1c3021;color:#fff;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 8px 30px rgba(28,48,33,0.3);">01</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#1c3021;margin-bottom:0.5rem;">Free Consultation</div>
+        <div style="font-size:0.875rem;line-height:1.7;color:#5a6e5c;">We visit your property, listen to your vision, and assess the space.</div>
+      </div>
+      <div class="reveal reveal-delay-1" style="text-align:center;padding:2rem 1.5rem;">
+        <div style="width:64px;height:64px;border-radius:50%;background:#2d5a3d;color:#fff;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 8px 30px rgba(45,90,61,0.3);">02</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#1c3021;margin-bottom:0.5rem;">Design & Quote</div>
+        <div style="font-size:0.875rem;line-height:1.7;color:#5a6e5c;">Our designers create a bespoke plan with a detailed, transparent quote.</div>
+      </div>
+      <div class="reveal reveal-delay-2" style="text-align:center;padding:2rem 1.5rem;">
+        <div style="width:64px;height:64px;border-radius:50%;background:#4a8060;color:#fff;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 8px 30px rgba(74,128,96,0.3);">03</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#1c3021;margin-bottom:0.5rem;">Expert Installation</div>
+        <div style="font-size:0.875rem;line-height:1.7;color:#5a6e5c;">Our skilled team brings the design to life, on time and on budget.</div>
+      </div>
+      <div class="reveal reveal-delay-3" style="text-align:center;padding:2rem 1.5rem;">
+        <div style="width:64px;height:64px;border-radius:50%;background:#d4a845;color:#1c3021;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 8px 30px rgba(212,168,69,0.3);">04</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#1c3021;margin-bottom:0.5rem;">Enjoy & Aftercare</div>
+        <div style="font-size:0.875rem;line-height:1.7;color:#5a6e5c;">We handover your transformed space and provide ongoing aftercare support.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" style="padding:7rem 0;background:linear-gradient(155deg,#1c3021 0%,#2d5a3d 60%,#1c3021 100%);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-20%;right:-15%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(74,128,96,0.2) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-30%;left:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,69,0.06) 0%,transparent 70%);pointer-events:none;"></div>
+
+  <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+      <div class="section-eyebrow section-eyebrow-light" style="justify-content:center;">Contact Us</div>
+      <h2 class="section-title section-title-light" style="margin-top:0.75rem;">Get In <em style="font-style:italic;color:#90b89a;">Touch</em></h2>
+      <p style="margin-top:1rem;font-size:1rem;line-height:1.7;color:rgba(255,255,255,0.6);max-width:36rem;margin-left:auto;margin-right:auto;">
+        Ready to transform your outdoor space? Get in touch for a free, no-obligation consultation.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;" class="md-grid">
+
+      <!-- Form -->
+      <div class="reveal-left">
+        <form id="contact-form" style="display:flex;flex-direction:column;gap:1.25rem;" onsubmit="handleSubmit(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+            <div>
+              <label class="contact-label">First Name</label>
+              <input type="text" class="contact-input" placeholder="John" required>
+            </div>
+            <div>
+              <label class="contact-label">Last Name</label>
+              <input type="text" class="contact-input" placeholder="Smith" required>
+            </div>
+          </div>
+          <div>
+            <label class="contact-label">Email Address</label>
+            <input type="email" class="contact-input" placeholder="john@example.com" required>
+          </div>
+          <div>
+            <label class="contact-label">Phone Number</label>
+            <input type="tel" class="contact-input" placeholder="07700 900 000">
+          </div>
+          <div>
+            <label class="contact-label">Service Required</label>
+            <select class="contact-input" style="appearance:none;cursor:pointer;">
+              <option value="" style="background:#1c3021;">Select a service...</option>
+              <option value="garden" style="background:#1c3021;">Garden Design</option>
+              <option value="driveway" style="background:#1c3021;">Driveway Renovation</option>
+              <option value="patio" style="background:#1c3021;">Patio & Decking</option>
+              <option value="lawn" style="background:#1c3021;">Lawn & Turf</option>
+              <option value="water" style="background:#1c3021;">Water Features</option>
+              <option value="lighting" style="background:#1c3021;">Landscape Lighting</option>
+              <option value="other" style="background:#1c3021;">Other / Multiple Services</option>
+            </select>
+          </div>
+          <div>
+            <label class="contact-label">Your Message</label>
+            <textarea class="contact-input" rows="4" placeholder="Tell us about your project..." style="resize:vertical;min-height:110px;"></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:1rem;">
+            Send Message
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <div id="form-success" style="display:none;text-align:center;color:#90b89a;font-size:0.9375rem;padding:1rem;background:rgba(144,184,154,0.1);border-radius:3px;border:1px solid rgba(144,184,154,0.2);">
+            ✓ Message sent! We'll be in touch within 24 hours.
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact details -->
+      <div class="reveal-right">
+        <div style="margin-bottom:2.5rem;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.375rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Let's Create Something Beautiful</div>
+          <p style="font-size:0.9375rem;line-height:1.7;color:rgba(255,255,255,0.55);">
+            Our team is ready to discuss your project. We typically respond within a few hours during business hours.
+          </p>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4a845" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.25rem;">Address</div>
+            <div style="color:#fff;font-size:0.9375rem;line-height:1.6;">12 Garden Lane, Surrey<br>GU1 4AB, United Kingdom</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4a845" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012.18 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.15a16 16 0 006.29 6.29l1.51-1.52a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.25rem;">Phone</div>
+            <div style="color:#fff;font-size:0.9375rem;">01483 000 000</div>
+            <div style="color:rgba(255,255,255,0.4);font-size:0.8125rem;margin-top:0.125rem;">Mon – Fri, 8am – 6pm</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4a845" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.25rem;">Email</div>
+            <div style="color:#fff;font-size:0.9375rem;">hello@landscapeltd.co.uk</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4a845" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.25rem;">Working Hours</div>
+            <div style="color:#fff;font-size:0.9375rem;line-height:1.6;">Mon – Fri: 8:00am – 6:00pm<br>Sat: 9:00am – 4:00pm</div>
+          </div>
+        </div>
+
+        <!-- Social links -->
+        <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:1rem;">Follow Our Work</div>
+          <div style="display:flex;gap:0.75rem;">
+            <a href="#" style="width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" style="width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" style="width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer style="background:#0d1a10;padding:4rem 0 2rem;">
+  <div class="max-w-7xl mx-auto px-6">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,0.07);" class="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
+          <div style="width:36px;height:36px;background:linear-gradient(135deg,#2d5a3d,#4a8060);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;letter-spacing:0.04em;color:#fff;line-height:1;">LANDSCAPE</div>
+            <div style="font-size:0.5rem;font-weight:600;letter-spacing:0.22em;color:rgba(255,255,255,0.35);line-height:1;margin-top:2px;">LTD</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem;line-height:1.7;color:rgba(255,255,255,0.4);max-width:22rem;">
+          Premium garden design and driveway renovation specialists serving Surrey, Kent, Hampshire, and throughout the South of England.
+        </p>
+        <div style="margin-top:1.5rem;display:flex;align-items:center;gap:0.5rem;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#4a8060;animation:pulse 2s infinite;"></div>
+          <span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Currently accepting new projects</span>
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style>
+      </div>
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Services</div>
+        <div style="display:flex;flex-direction:column;gap:0.625rem;">
+          <a href="#services" class="footer-link">Garden Design</a>
+          <a href="#services" class="footer-link">Driveway Renovation</a>
+          <a href="#services" class="footer-link">Patio & Decking</a>
+          <a href="#services" class="footer-link">Lawn & Turf</a>
+          <a href="#services" class="footer-link">Water Features</a>
+          <a href="#services" class="footer-link">Landscape Lighting</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:0.625rem;">
+          <a href="#about" class="footer-link">About Us</a>
+          <a href="#work" class="footer-link">Our Projects</a>
+          <a href="#reviews" class="footer-link">Testimonials</a>
+          <a href="#contact" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.6875rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Contact</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="font-size:0.875rem;color:rgba(255,255,255,0.45);line-height:1.5;">12 Garden Lane<br>Surrey, GU1 4AB</div>
+          <a href="tel:01483000000" class="footer-link">01483 000 000</a>
+          <a href="mailto:hello@landscapeltd.co.uk" class="footer-link">hello@landscapeltd.co.uk</a>
+        </div>
+      </div>
+    </div>
+    <div style="padding-top:2rem;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+      <div style="font-size:0.8125rem;color:rgba(255,255,255,0.25);">© 2025 Landscape LTD. All rights reserved.</div>
+      <div style="font-size:0.8125rem;color:rgba(255,255,255,0.25);">Registered in England & Wales · No. 12345678</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Nav on scroll ──
+  const navbar = document.getElementById('navbar');
+  const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── Mobile menu ──
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  const closeMenu = () => {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  document.getElementById('close-menu').addEventListener('click', closeMenu);
+  document.querySelectorAll('#mobile-menu .nav-link, #mobile-menu .btn-primary').forEach(el =>
+    el.addEventListener('click', closeMenu)
+  );
+
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+  // ── Count-up animation ──
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = +el.dataset.target;
+      const duration = 1800;
+      const start = performance.now();
+      const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(ease * target);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      countObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.count-target').forEach(el => countObserver.observe(el));
+
+  // ── Portfolio filter ──
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const portfolioItems = document.querySelectorAll('.portfolio-item');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      portfolioItems.forEach(item => {
+        const match = filter === 'all' || item.dataset.cat === filter;
+        if (match) {
+          item.style.display = '';
+          item.style.animation = 'fadeIn 0.4s ease forwards';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+  const fadeInStyle = document.createElement('style');
+  fadeInStyle.textContent = '@keyframes fadeIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:none}}';
+  document.head.appendChild(fadeInStyle);
+
+  // ── Testimonial carousel ──
+  const track = document.getElementById('testimonial-track');
+  const cards = track.querySelectorAll('.testimonial-card');
+  const dots = document.querySelectorAll('.dot');
+  let current = 0;
+  let autoSlide;
+
+  function getCardWidth() {
+    const card = cards[0];
+    const gap = 24;
+    return card.offsetWidth + gap;
+  }
+
+  function goTo(idx) {
+    const maxIdx = Math.max(0, cards.length - getVisibleCount());
+    current = Math.max(0, Math.min(idx, maxIdx));
+    const offset = current * getCardWidth();
+    track.style.transform = `translateX(-${offset}px)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === Math.floor(current / 1)));
+  }
+
+  function getVisibleCount() {
+    return window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+  }
+
+  document.getElementById('prev-btn').addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+  document.getElementById('next-btn').addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); resetAuto(); }));
+
+  function startAuto() {
+    autoSlide = setInterval(() => {
+      const maxIdx = Math.max(0, cards.length - getVisibleCount());
+      goTo(current >= maxIdx ? 0 : current + 1);
+    }, 4500);
+  }
+  function resetAuto() { clearInterval(autoSlide); startAuto(); }
+
+  startAuto();
+
+  // ── Form submit ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    const success = document.getElementById('form-success');
+    success.style.display = 'block';
+    e.target.querySelectorAll('input,select,textarea').forEach(el => { el.value = ''; });
+    setTimeout(() => { success.style.display = 'none'; }, 6000);
+  }
+
+  // ── Responsive grid fix ──
+  function applyResponsive() {
+    const w = window.innerWidth;
+    document.querySelectorAll('.md-grid').forEach(el => {
+      el.style.gridTemplateColumns = w < 768 ? '1fr' : '';
+    });
+    document.querySelectorAll('.footer-grid').forEach(el => {
+      el.style.gridTemplateColumns = w < 640 ? '1fr' : w < 1024 ? '1fr 1fr' : '';
+    });
+    const statsGrid = document.getElementById('stats-grid');
+    if (statsGrid) statsGrid.style.gridTemplateColumns = w >= 768 ? 'repeat(4,1fr)' : 'repeat(2,1fr)';
+  }
+  applyResponsive();
+  window.addEventListener('resize', applyResponsive);
+</script>
+
+</body>
+</html>

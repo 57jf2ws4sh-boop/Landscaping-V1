@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//usr/local/**)",
+      "Read(//opt/homebrew/**)",
+      "Bash(nvm use *)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\")",
+      "Bash(brew list *)",
+      "Read(//Users/user/.nvm/versions/**)",
+      "Bash(osascript)",
+      "Bash(screencapture -x \"/Users/user/Documents/Landscape Website/temporary screenshots/screenshot-4.png\")",
+      "Bash(screencapture -x \"/Users/user/Documents/Landscape Website/temporary screenshots/screenshot-6.png\")",
+      "Bash(screencapture -T 3 \"/Users/user/Documents/Landscape Website/temporary screenshots/screenshot-real4.png\")"
+    ]
+  }
+}
