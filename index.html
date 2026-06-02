@@ -3,8 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>J Crews| Landscaping and Gardening Specialists</title>
+  <title>Green Landscaping | Landscaping & Gardening Specialists</title>
+  <meta name="description" content="Green Landscaping transforms outdoor spaces with premium garden design, porcelain patios, artificial lawns, and composite decking. Free consultations available.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://landscaping-v1.vercel.app/">
+
+  <!-- Open Graph tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Green Landscaping | Landscaping & Gardening Specialists">
+  <meta property="og:description" content="Green Landscaping transforms outdoor spaces with premium garden design, porcelain patios, artificial lawns, and composite decking. Free consultations available.">
+  <meta property="og:url" content="https://landscaping-v1.vercel.app/">
+  <meta property="og:image" content="https://landscaping-v1.vercel.app/images/photo-hero-main.jpg">
+
+  <!-- Twitter Card tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Green Landscaping | Landscaping & Gardening Specialists">
+  <meta name="twitter:description" content="Green Landscaping transforms outdoor spaces with premium garden design, porcelain patios, artificial lawns, and composite decking. Free consultations available.">
+  <meta name="twitter:image" content="https://landscaping-v1.vercel.app/images/photo-hero-main.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script>
     tailwind.config = {
       theme: {
@@ -28,7 +49,41 @@
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/photo-hero-main.jpg">
+
+  <!-- Schema.org LocalBusiness structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LandscapeArchitect",
+    "name": "Green Landscaping",
+    "url": "https://landscaping-v1.vercel.app/",
+    "description": "Green Landscaping transforms outdoor spaces with premium garden design, porcelain patios, artificial lawns, and composite decking.",
+    "telephone": "+44 000 000 0000",
+    "email": "info@example.com",
+    "areaServed": {
+      "@type": "City",
+      "name": "[Client Service Area]"
+    },
+    "serviceType": [
+      "Garden Design",
+      "Driveway Renovation",
+      "Artificial Lawns",
+      "Porcelain Patios",
+      "Composite Decking",
+      "Garden Lighting"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "6"
+    },
+    "image": "https://landscaping-v1.vercel.app/images/photo-hero-main.jpg"
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -998,7 +1053,7 @@
 
       <div class="reveal-left">
         <div style="position:relative;border-radius:4px;overflow:hidden;">
-          <img src="images/photo-lawn.webp" alt="Our team at work" style="width:100%;aspect-ratio:5/6;object-fit:cover;object-position:center top;display:block;">
+          <img src="images/photo-lawn.webp" alt="Premium artificial lawn installation" style="width:100%;aspect-ratio:5/6;object-fit:cover;object-position:center top;display:block;">
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(13,26,16,0.7) 0%,transparent 60%);"></div>
           <div style="position:absolute;bottom:2rem;left:2rem;right:2rem;">
             <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;">
@@ -1164,6 +1219,8 @@
             Send Message
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
+          <!-- reCAPTCHA v2 — client: replace data-sitekey with your site key from google.com/recaptcha/admin -->
+          <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" style="margin-top:1rem;"></div>
           <div id="form-success" style="display:none;text-align:center;color:#90b89a;font-size:0.9375rem;padding:1rem;background:rgba(144,184,154,0.1);border-radius:3px;border:1px solid rgba(144,184,154,0.2);">
             ✓ Message sent! We'll be in touch within 24 hours.
           </div>
@@ -1412,9 +1469,15 @@
   // ── Form submit ──
   function handleSubmit(e) {
     e.preventDefault();
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (!recaptchaResponse) {
+      alert('Please complete the reCAPTCHA before sending.');
+      return;
+    }
     const success = document.getElementById('form-success');
     success.style.display = 'block';
     e.target.querySelectorAll('input,select,textarea').forEach(el => { el.value = ''; });
+    grecaptcha.reset();
     setTimeout(() => { success.style.display = 'none'; }, 6000);
   }
 
