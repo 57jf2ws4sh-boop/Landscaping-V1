@@ -6,7 +6,7 @@
   <title>Green Landscaping | Landscaping & Gardening Specialists</title>
   <meta name="description" content="Green Landscaping transforms outdoor spaces with premium garden design, porcelain patios, artificial lawns, and composite decking. Free consultations available.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://landscaping-v1.vercel.app/">
+  z<link rel="canonical" href="https://landscaping-v1.vercel.app/">
 
   <!-- Open Graph tags -->
   <meta property="og:type" content="website">
@@ -240,6 +240,50 @@
       box-shadow: 0 8px 30px rgba(212,168,69,0.45);
     }
     .btn-primary:active { transform: translateY(0); }
+
+    /* ── Cookie banner ── */
+    #cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10000;
+      background: #1c3021; color: #fff;
+      padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.25);
+      font-family: 'Inter', sans-serif; font-size: 0.875rem; line-height: 1.6;
+    }
+    #cookie-banner p { margin: 0; color: rgba(255,255,255,0.9); }
+    #cookie-banner.hidden { display: none; }
+    .cookie-banner-actions {
+      display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+    }
+    .cookie-learn-btn {
+      background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4);
+      padding: 0.675rem 1.5rem; border-radius: 3px; font-size: 0.8125rem; font-weight: 500;
+      letter-spacing: 0.03em; text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cookie-learn-btn:hover {
+      border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05);
+    }
+    .cookie-accept-btn {
+      background: #d4a845; color: #1c3021; border: none; padding: 0.675rem 1.5rem;
+      border-radius: 3px; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em;
+      cursor: pointer; transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(212,168,69,0.35);
+    }
+    .cookie-accept-btn:hover {
+      background: #e0c070; box-shadow: 0 6px 25px rgba(212,168,69,0.45);
+    }
+    @media (max-width: 768px) {
+      #cookie-banner {
+        flex-direction: column; align-items: flex-start; gap: 1rem;
+      }
+      .cookie-banner-actions {
+        flex-direction: column; width: 100%;
+      }
+      .cookie-learn-btn, .cookie-accept-btn {
+        width: 100%; text-align: center;
+      }
+    }
+
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: transparent; color: #fff;
@@ -559,6 +603,15 @@
   </style>
 </head>
 <body>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" class="hidden">
+  <p>This site uses cookies for spam protection via Google reCAPTCHA. By continuing to use this site you agree to our use of cookies.</p>
+  <div class="cookie-banner-actions">
+    <a href="/privacy-policy" target="_blank" rel="noopener" class="cookie-learn-btn">Learn More</a>
+    <button type="button" id="cookie-accept-btn" class="cookie-accept-btn">Accept</button>
+  </div>
+</div>
 
 <!-- ═══ NAVIGATION ═══ -->
 <nav id="navbar">
@@ -1501,6 +1554,20 @@
   }
   applyResponsive();
   window.addEventListener('resize', applyResponsive);
+
+  // ── Cookie consent banner ──
+  (function() {
+    var COOKIE_KEY = 'cookieConsentAccepted';
+    var banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+    if (localStorage.getItem(COOKIE_KEY) !== 'true') {
+      banner.classList.remove('hidden');
+    }
+    document.getElementById('cookie-accept-btn').addEventListener('click', function() {
+      localStorage.setItem(COOKIE_KEY, 'true');
+      banner.classList.add('hidden');
+    });
+  })();
 </script>
 
 </body>
